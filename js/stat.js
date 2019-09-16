@@ -18,28 +18,47 @@ var renderCloud = function(ctx, x, y, color) {
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
 
-var getMaxElement = function(arr) {
-  var maxElement = arr[0];
-
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] > maxElement) {
-      maxElement = arr[i];
-    }
-  }
-
-  return maxElement;
+var getMaxElement = function (times) {
+  return Math.max.apply(null, times);
 };
 
-window.renderStatistics = function(ctx, players, times) {
-  renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
-  renderCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
+var getRandomBlueColor = function () {
+  return 'hsl(240,100%,' + Math.floor(Math.random() * 100) + '%)';
+};
 
-  ctx.fillStyle = '#000';
+window.renderStatistics = function(ctx, names, times) {
+  renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, CLOUD_SHADOW_COLOR);
+  renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_COLOR);
+
+  ctx.fillStyle = CLOUD_FONT_COLOR;
+  ctx.textBaseline = 'hanging';
 
   var maxTime = getMaxElement(times);
 
-  for (var i = 0; i < players.length; i++) {
-    ctx.fillText(players[i], CLOUD_X + GAP, CLOUD_Y + GAP + FONT_GAP + (GAP + BAR_HEIGHT) * i);
-    ctx.fillRect(CLOUD_X + GAP + TEXT_WIDTH, CLOUD_Y + GAP + (GAP + BAR_HEIGHT) * i, (barWidth * times[i]) / maxTime, BAR_HEIGHT);
+  ctx.fillText('Ура вы победили!', CLOUD_X + GAP, CLOUD_Y + GAP);
+  ctx.fillText('Список результатов:', CLOUD_X + GAP, CLOUD_Y + GAP + CLOUD_FONT_SIZE + GAP);
+
+  var actualBarHeight;
+  var actualX = CLOUD_X;
+  var actualY = CLOUD_Y + ((GAP + CLOUD_FONT_SIZE) * 2) + GAP + CLOUD_FONT_SIZE + BAR_HEIGHT;
+
+
+  for (var i = 0; i < names.length; i++) {
+    actualX += BAR_GAP;
+
+    actualBarHeight = (times[i] * BAR_HEIGHT / maxTime);
+
+    if (names[i] === BAR_MY_NAME) {
+      ctx.fillStyle = BAR_MY_COLOR;
+    } else {
+      ctx.fillStyle = getRandomBlueColor();
+    }
+
+    ctx.fillRect(actualX, actualY - BAR_HEIGHT + (BAR_HEIGHT - actualBarHeight), BAR_WIDTH, actualBarHeight);
+
+    ctx.fillText(names[i], actualX, actualY + GAP);
+    ctx.fillText(Math.floor(times[i]), actualX, actualY - BAR_HEIGHT + (BAR_HEIGHT - actualBarHeight) - CLOUD_FONT_SIZE);
+    ctx.fillStyle = CLOUD_FONT_COLOR;
+    actualX += BAR_WIDTH;
   }
 };
