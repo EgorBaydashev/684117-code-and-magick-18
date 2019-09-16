@@ -1,3 +1,5 @@
+'use strict'
+
 var CLOUD_WIDTH = 420;
 var CLOUD_HEIGHT = 270;
 var CLOUD_X = 100;
@@ -13,7 +15,7 @@ var BAR_GAP = 50;
 var BAR_MY_NAME = 'Вы';
 var BAR_MY_COLOR = 'rgba(255, 0, 0, 1)';
 
-var renderCloud = function(ctx, x, y, color) {
+var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 };
@@ -26,7 +28,7 @@ var getRandomBlueColor = function () {
   return 'hsl(240,100%,' + Math.floor(Math.random() * 100) + '%)';
 };
 
-window.renderStatistics = function(ctx, names, times) {
+window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, CLOUD_SHADOW_COLOR);
   renderCloud(ctx, CLOUD_X, CLOUD_Y, CLOUD_COLOR);
 
